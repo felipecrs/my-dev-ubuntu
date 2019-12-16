@@ -78,8 +78,8 @@ Vagrant.configure("2") do |config|
     set -ex
 
     export DEBIAN_FRONTEND=noninteractive
-    apt-get update
-    apt-get -y dist-upgrade
+    sudo apt-get update
+    sudo apt-get -y dist-upgrade
 
     sudo snap refresh
 
