@@ -75,19 +75,25 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    set -ex
+    set -euxo pipefail
 
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update
-    sudo apt-get -y dist-upgrade
-
+    sudo apt-get dist-upgrade -qq
     sudo snap refresh
 
     # Set keyboard layout to Portuguese (Brazil)
-    echo "setxkbmap br" >> ~/.bashrc
+    gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'br')]"
 
     # Set timezone to America/Sao_Paulo
     sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
-  SHELL
 
+    # Do not ask for https password on git every time
+    git config --global credential.helper store
+
+    # Set default browser
+
+    # Disable welcome screen
+    
+  SHELL
 end
