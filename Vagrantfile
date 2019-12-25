@@ -51,19 +51,19 @@ Vagrant.configure("2") do |config|
   #
   config.vm.provider "virtualbox" do |vb|
 
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
+	# Display the VirtualBox GUI when booting the machine
+	vb.gui = true
 
-    # Set the display name of the VM in VirtualBox
-    vb.name = "my-bionic-4dev"
+	# Set the display name of the VM in VirtualBox
+	vb.name = "my-bionic-4dev"
 
-    # Customize the amount of memory on the VM:
-    vb.memory = "8192"
-    # Customize the amount of CPU on the VM:
-    vb.cpus = "2"
+	# Customize the amount of memory on the VM:
+	vb.memory = "8192"
+	# Customize the amount of CPU on the VM:
+	vb.cpus = "4"
 
-    # Make the DNS calls be resolved on host
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+	# Make the DNS calls be resolved on host
+	vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
   end
   #
@@ -75,25 +75,25 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    set -euxo pipefail
+	set -euxo pipefail
 
-    export DEBIAN_FRONTEND=noninteractive
-    sudo apt-get update
-    sudo apt-get dist-upgrade -qq
-    sudo snap refresh
+	export DEBIAN_FRONTEND=noninteractive
+	sudo apt-get update
+	sudo apt-get dist-upgrade -qq
+	sudo snap refresh
 
-    # Set keyboard layout to Portuguese (Brazil)
-    gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'br')]"
+	# Set keyboard layout to Portuguese (Brazil)
+	gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'br')]"
 
-    # Set timezone to America/Sao_Paulo
-    sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
+	# Set timezone to America/Sao_Paulo
+	sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 
-    # Do not ask for https password on git every time
-    git config --global credential.helper store
+	# Do not ask for https password on git every time
+	git config --global credential.helper store
 
-    # Set default browser
+	# Set default browser
 
-    # Disable welcome screen
-    
+	# Disable welcome screen
+	
   SHELL
 end
