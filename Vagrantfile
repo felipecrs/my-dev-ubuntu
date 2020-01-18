@@ -16,6 +16,11 @@ Vagrant.configure("2") do |config|
   # Bridge network mode
   # config.vm.network "public_network"
 
+  # Insert SSH key (but sadly this doesn't work on Windows Host with Git Bash)
+  config.ssh.forward_agent = true
+
+  # Workaround to forward ssh key from Windows Host with Git Bash
+
   # Share folder
   # config.vm.synced_folder "C:/", "/c/"
   config.vm.synced_folder "~/Repository", "/home/vagrant/Repository"
@@ -38,24 +43,6 @@ Vagrant.configure("2") do |config|
 
   end
 
-  # Insert SSH key
-  if Vagrant::Util::Platform.windows?
-    if File.exists?(File.join(Dir.home, ".ssh", "id_rsa"))
-      ssh_key = File.read(File.join(Dir.home, ".ssh", "id_rsa"))
-      config.vm.provision "shell", privileged: false, inline: <<-SHELL
-        set -euo pipefail
-        echo 'Windows-specific: Copying local SSH Key to VM for provisioning...'
-        mkdir -p /home/vagrant/.ssh
-        echo '#{ssh_key}' > /home/vagrant/.ssh/id_rsa
-        chmod 600 /home/vagrant/.ssh/id_rsa
-        # ssh-add
-      SHELL
-    else
-      # Else, throw a Vagrant Error. Cannot successfully startup on Windows without a GitHub SSH Key!
-      raise Vagrant::Errors::VagrantError, "\n\nERROR: SSH Key not found at ~/.ssh/id_rsa (required on Windows).\nYou can generate this key manually by using ssh-keygen\n\n"
-    end
-  end
-
   # Check if we run in a Inatel computer
   require 'socket'
   inatel = Socket.gethostbyname(Socket.gethostname).first.end_with?("inatel.br")
@@ -69,6 +56,7 @@ Vagrant.configure("2") do |config|
     # Upgrade system
     sudo apt-get update
     sudo apt-get dist-upgrade -qq
+    sudo apt-get autoremove -qq
     sudo snap refresh
 
     # Set keyboard layout to Portuguese (Brazil)
@@ -77,12 +65,7 @@ Vagrant.configure("2") do |config|
     # Set timezone to America/Sao_Paulo
     sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 
-    # Do not ask for https password on git every time
-    git config --global credential.helper store
-
     # Set default browser
-
-    # Disable welcome screen
 
     # Set git name
     if [ '#{inatel}' = true ]; then
@@ -94,5 +77,8 @@ Vagrant.configure("2") do |config|
     fi
 
   SHELL
+
+  # Check if SSH agent forward is working
+  # config.vm.provision "shell", privileged: false, inline: "ssh -o StrictHostKeyChecking=no -T git@github.com", run: "always"
 
 end

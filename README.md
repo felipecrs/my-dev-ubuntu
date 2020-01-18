@@ -1,6 +1,6 @@
 # my-ubuntu1804-4dev
 
-This is my Vagrantfile based on [felipecassiors/ubuntu1804-4dev](https://app.vagrantup.com/felipecassiors/boxes/ubuntu1804-4dev) base box.
+This is my `Vagrantfile` based on [felipecassiors/ubuntu1804-4dev](https://app.vagrantup.com/felipecassiors/boxes/ubuntu1804-4dev) base box.
 
 ## Requisites
 
