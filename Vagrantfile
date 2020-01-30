@@ -91,6 +91,28 @@ Vagrant.configure("2") do |config|
       git config --global user.email felipecassiors@gmail.com
     fi
 
+    code --install-extension Shan.code-settings-sync
+
+    if [ '#{inatel}' = true ]; then
+      gist="627a4486c0f4e3d8efc280a4b453d066"
+    else
+      gist="300c2e853ae35e9b26159966406471e8"
+    fi
+
+    jq -n \
+      --arg gist "$gist" '
+      {
+      "sync": {
+          "gist": $gist,
+          "autoDownload": true
+        }
+      }
+      ' | tee ~/.config/Code/User/settings.json
+    jq -n '
+      {
+        "downloadPublicGist": true
+      }
+      ' | tee ~/.config/Code/User/syncLocalSettings.json
   SHELL
 
   # Check if SSH agent forward is working
