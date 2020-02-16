@@ -70,8 +70,8 @@ Vagrant.configure("2") do |config|
 
     # Upgrade system
     sudo apt-get update
-    sudo apt-get dist-upgrade -qq
-    sudo apt-get autoremove -qq
+    sudo apt-get dist-upgrade -y
+    sudo apt-get autoremove -y
     sudo snap refresh
 
     # Set keyboard layout to Portuguese (Brazil)
