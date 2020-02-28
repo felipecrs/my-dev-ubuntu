@@ -16,8 +16,26 @@ Vagrant.configure("2") do |config|
   # Bridge network mode
   # config.vm.network "public_network"
 
-  # Insert SSH key (but sadly this doesn't work on Windows Host with Git Bash)
-  config.ssh.forward_agent = true
+  # Share folder
+  # config.vm.synced_folder "C:/", "/c/"
+  config.vm.synced_folder "~/Repository", "/home/vagrant/Repository"
+
+  # Check if we run in a Inatel computer
+  require 'socket'
+  inatel = Socket.gethostbyname(Socket.gethostname).first.end_with?("inatel.br")
+
+  config.vm.provider "virtualbox" do |vb|
+    # Set the display name of the VM in VirtualBox
+    vb.name = "my-bionic-4dev"
+    # Customize the amount of memory on the VM:
+    vb.memory = "8192"
+    # Customize the amount of CPU on the VM:
+    if inatel
+      vb.cpus = "2"
+    else
+      vb.cpus = "4"
+    end
+  end
 
   # Workaround to forward ssh key from Windows Host with Git Bash
   if Vagrant::Util::Platform.windows?
@@ -31,47 +49,17 @@ Vagrant.configure("2") do |config|
         raise Vagrant::Errors::VagrantError, "\n\nERROR: SSH Key not found at ~/.ssh/id_rsa.\nYou can generate this key manually by running `ssh-keygen` in Git Bash.\n\n"
     end
   end
-
-  # Share folder
-  # config.vm.synced_folder "C:/", "/c/"
-  config.vm.synced_folder "~/Repository", "/home/vagrant/Repository"
-
-  # Check if we run in a Inatel computer
-  require 'socket'
-  inatel = Socket.gethostbyname(Socket.gethostname).first.end_with?("inatel.br")
-
-  config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI
-    vb.gui = true
-
-    # Set the display name of the VM in VirtualBox
-    vb.name = "my-bionic-4dev"
-
-    # Customize the amount of memory on the VM:
-    vb.memory = "8192"
-
-    # Customize the amount of CPU on the VM:
-    if inatel
-      vb.cpus = "2"
-    else
-      vb.cpus = "4"
-    end
-
-    # Make the DNS calls be resolved on host
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-
-  end
-
+  
   # Run a shell script in first run
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     set -euxo pipefail
 
-    export DEBIAN_FRONTEND=noninteractive
+    APT_GET='sudo DEBIAN_FRONTEND=noninteractive apt-get'
 
     # Upgrade system
-    sudo apt-get update
-    sudo apt-get dist-upgrade -y
-    sudo apt-get autoremove -y
+    $APT_GET update
+    $APT_GET dist-upgrade -y
+    $APT_GET autoremove -y
     sudo snap refresh
 
     # Set keyboard layout to Portuguese (Brazil)
@@ -91,8 +79,9 @@ Vagrant.configure("2") do |config|
       git config --global user.email felipecassiors@gmail.com
     fi
 
+    # Install VS Code Settings Sync extension
     code --install-extension Shan.code-settings-sync
-
+    # Set the gist for the Settings Sync extension to download
     if [ '#{inatel}' = true ]; then
       gist="627a4486c0f4e3d8efc280a4b453d066"
     else
