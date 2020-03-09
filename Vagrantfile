@@ -82,11 +82,7 @@ Vagrant.configure("2") do |config|
     # Install VS Code Settings Sync extension
     code --install-extension Shan.code-settings-sync
     # Set the gist for the Settings Sync extension to download
-    if [ '#{inatel}' = true ]; then
-      gist="627a4486c0f4e3d8efc280a4b453d066"
-    else
-      gist="300c2e853ae35e9b26159966406471e8"
-    fi
+    gist="300c2e853ae35e9b26159966406471e8"
 
     jq -n \
       --arg gist "$gist" '
