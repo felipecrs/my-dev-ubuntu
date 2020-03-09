@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
   # Share folder
   # config.vm.synced_folder "C:/", "/c/"
-  config.vm.synced_folder "~/Repository", "/home/vagrant/Repository"
+  config.vm.synced_folder "~/Repos", "/home/vagrant/Repos"
 
   # Check if we run in a Inatel computer
   require 'socket'
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
         raise Vagrant::Errors::VagrantError, "\n\nERROR: SSH Key not found at ~/.ssh/id_rsa.\nYou can generate this key manually by running `ssh-keygen` in Git Bash.\n\n"
     end
   end
-  
+
   # Run a shell script in first run
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     set -euxo pipefail
