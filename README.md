@@ -1,11 +1,18 @@
-# my-ubuntu1804-4dev
+# My Dev Ubuntu 20.04
 
-This is my `Vagrantfile` based on [felipecassiors/ubuntu1804-4dev](https://app.vagrantup.com/felipecassiors/boxes/ubuntu1804-4dev) base box.
+This is my personal `Vagrantfile` based on [felipecassiors/dev-ubuntu-20.04](https://app.vagrantup.com/felipecassiors/boxes/dev-ubuntu-20.04) base box.
 
 ## Requisites
 
 - VirtualBox ([download](https://www.virtualbox.org/wiki/Downloads))
 - Vagrant ([download](https://www.vagrantup.com/downloads.html))
+
+> 💡 **Pro tip**
+> On Windows, you can install both at once with [Chocolatey](https://chocolatey.org/install) with
+>
+> ```powershell
+> choco install virtualbox vagrant
+> ```
 
 ### Usage
 
