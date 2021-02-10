@@ -1,8 +1,8 @@
 Vagrant.configure("2") do |config|
   # https://docs.vagrantup.com
 
-  # https://app.vagrantup.com/felipecassiors/boxes/ubuntu1804-4dev
-  config.vm.box = "felipecassiors/dev-ubuntu-20.04"
+  # https://app.vagrantup.com/felipecrs/boxes/ubuntu1804-4dev
+  config.vm.box = "felipecrs/dev-ubuntu"
 
   # Expose VM port to host, enable public access
   config.vm.network "forwarded_port", guest: 8080, host: 8080
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     # Set the display name of the VM in VirtualBox
-    vb.name = "dev-ubuntu-20.04"
+    vb.name = "dev-ubuntu"
     # Customize the amount of memory on the VM:
     vb.memory = "8192"
     # Customize the amount of CPU on the VM:

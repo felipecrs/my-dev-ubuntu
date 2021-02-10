@@ -1,6 +1,6 @@
 # My Dev Ubuntu 20.04
 
-This is my personal `Vagrantfile` based on [felipecassiors/dev-ubuntu-20.04](https://app.vagrantup.com/felipecassiors/boxes/dev-ubuntu-20.04) base box.
+This is my personal `Vagrantfile` based on [felipecrs/dev-ubuntu](https://app.vagrantup.com/felipecrs/boxes/dev-ubuntu) base box.
 
 ## Requisites
 
