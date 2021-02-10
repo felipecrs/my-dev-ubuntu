@@ -1,4 +1,4 @@
-# My Dev Ubuntu 20.04
+# My Dev Ubuntu
 
 This is my personal `Vagrantfile` based on [felipecrs/dev-ubuntu](https://app.vagrantup.com/felipecrs/boxes/dev-ubuntu) base box.
 
