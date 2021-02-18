@@ -20,9 +20,9 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "C:/", "/c/"
   config.vm.synced_folder "~/Repos", "/home/vagrant/Repos"
 
-  # Check if we run in a Inatel computer
+  # Check if we run in a work computer
   require 'socket'
-  inatel = Socket.gethostbyname(Socket.gethostname).first.end_with?("inatel.br")
+  work = Socket.gethostbyname(Socket.gethostname).first.end_with?("inatel.br")
 
   config.vm.provider "virtualbox" do |vb|
     # Set the display name of the VM in VirtualBox
@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
     # Customize the amount of memory on the VM:
     vb.memory = "8192"
     # Customize the amount of CPU on the VM:
-    if inatel
+    if work
       vb.cpus = "2"
     else
       vb.cpus = "4"
@@ -50,6 +50,9 @@ Vagrant.configure("2") do |config|
   #       raise Vagrant::Errors::VagrantError, "\n\nERROR: SSH Key not found at ~/.ssh/id_rsa.\nYou can generate this key manually by running `ssh-keygen` in Git Bash.\n\n"
   #   end
   # end
+  #
+  # Check if SSH agent forward is working
+  # config.vm.provision "shell", privileged: false, inline: "ssh -o StrictHostKeyChecking=no -T git@github.com", run: "always"
 
   # Run a shell script in first run
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
@@ -67,19 +70,10 @@ Vagrant.configure("2") do |config|
     gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'br')]"
 
     # Set timezone to America/Sao_Paulo
-    sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
+    sudo rm -f /etc/localtime
+    sudo ln -s /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 
-    # Set git name
-    if [ '#{inatel}' = true ]; then
-      git config --global user.name "Felipe de Cássio Rocha Santos"
-      git config --global user.email felipesantos@inatel.br
-    else
-      git config --global user.name "Felipe Santos"
-      git config --global user.email felipecassiors@gmail.com
-    fi
+    sh -c "$(curl -fsSL https://git.io/felipecrs-dotfiles)"
   SHELL
-
-  # Check if SSH agent forward is working
-  # config.vm.provision "shell", privileged: false, inline: "ssh -o StrictHostKeyChecking=no -T git@github.com", run: "always"
 
 end
